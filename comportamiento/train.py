@@ -55,10 +55,30 @@ def predict_new_data(model_path, new_data_filepath):
 
     return results_final
 
+# Función para convertir una matriz en una matriz binaria
+def binarize_matrix(matrix):
+    binary_matrix = np.where(matrix > 0, 1, 0)
+    return binary_matrix
+
 if __name__ == "__main__":
     filepath = 'https://raw.githubusercontent.com/itssam0/Reto_Celsia/main/consumo_casa.csv'
     new_data_filepath = 'https://raw.githubusercontent.com/itssam0/Reto_Celsia/main/new_data.csv'
     train_and_save_model(filepath)
     predicted_matrix = predict_new_data('model.keras', new_data_filepath)
+
+    # Guarda la matriz de predicción original
     predicted_matrix.to_csv('predicted_results.csv', index=False)
+
+    # Convertir los resultados predichos a binario
+    target_columns = ['Refrigerator', 'Clothes washer', 'Clothes Iron', 'Computer', 'Oven', 'Play', 'TV', 'Sound system']
+    binary_matrix = predicted_matrix.copy()
+    binary_matrix[target_columns] = binarize_matrix(predicted_matrix[target_columns].values)
+
+    # Guardar la matriz de predicción binaria en un archivo CSV
+    binary_matrix.to_csv('binary_predicted_results.csv', index=False)
+
+    # Imprimir ambas matrices para verificación
+    print("Predicted Matrix:")
     print(predicted_matrix)
+    print("\nBinary Matrix:")
+    print(binary_matrix)
