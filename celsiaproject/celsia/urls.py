@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from interfaz import views as interfazViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', interfazViews.home)
 ]
